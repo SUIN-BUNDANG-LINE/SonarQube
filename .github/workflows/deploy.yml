@@ -9,7 +9,6 @@ on:
 jobs:
   deploy:
     name: 배포 작업
-    needs: build
     runs-on: ubuntu-latest
 
     steps:
