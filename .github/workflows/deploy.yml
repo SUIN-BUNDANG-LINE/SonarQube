@@ -22,7 +22,7 @@ jobs:
           script: |
             cd /home/ubuntu/SonarQube
             git pull origin main
-            echo "${{ secrets.EC2_ENV_FILE }}" > .env
+            echo "${{ secrets.SONARQUBE_ENV_FILE }}" > .env
             docker-compose down
             docker-compose up -d --build
             docker image prune -af
