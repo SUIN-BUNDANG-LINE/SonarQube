@@ -1,0 +1,28 @@
+name: SonarQube EC2 배포
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: 배포 작업
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: EC2에 배포
+        uses: appleboy/ssh-action@v0.1.7
+        with:
+          host: ${{ secrets.SONARQUBE_EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.DEVELOP_EC2_KEY }}
+          script: |
+            cd /home/ubuntu/SonarQube
+            git pull origin main
+            echo "${{ secrets.SONARQUBE_ENV_FILE }}" > .env
+            docker-compose down
+            docker-compose up -d --build
+            docker image prune -af
